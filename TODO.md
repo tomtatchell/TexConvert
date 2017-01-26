@@ -1,5 +1,6 @@
 # Things to do
-
+---
+---
 - [x] Get active material  
 - [x] Get material type  
 - [x] Check material type (VRay, Standard, C4DtoA)  
@@ -21,3 +22,5 @@
 - [ ] Get Script running for selected material only **OR** all VRay materials
 - [ ] Have option to replace existing VRay material assignments or not
 - [ ] Have option to create tags on objects if material has transparency of some sort (Could just be an option button, if the layer contains any variation on 100% opacity)
+
+- [ ] Test other VRay material types.

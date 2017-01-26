@@ -5,8 +5,10 @@
 - [x] Check material type (VRay, Standard, C4DtoA)  
  - If it's a VRay material  
  - [x] Get active material layers  
- - [ ] Get material layer data  
- - [ ] Check for Texture Map  
- - [ ] Check for RGB vectors  
+ - [x] Get material layer data  
+ - [x] Check for Texture Map  
+ - [x] Check for RGB vectors  
 
-- [ ] Fix VRay to Arnold Anisotropy rotation conversion 
+- [x] Fix VRay to Arnold Anisotropy rotation conversion  
+- [ ] Create Get and Set for specular channel 2  
+- [ ] Create Get and Set Bump (Logic needed for adding bump **After** the alSurface node)

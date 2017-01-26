@@ -104,6 +104,14 @@ def SetRootShader(material, shader, rootPortId):
     material.Message(c4d.MSG_BASECONTAINER, msg)
     return msg.GetBool(C4DTOA_MSG_RESP1)
 
+def rangeMap(curValue, curMax, curMin, newMax, newMin):
+    curRange = (curMax - curMin)
+    if (curRange == 0): return 0
+    else:
+        newRange = (newMax - newMin)
+        newVal = (((curValue - curMin) * newRange) / curRange) + newMin
+        return newVal
+
 doc = c4d.documents.GetActiveDocument()
 mat = doc.GetActiveMaterial()
 
@@ -280,7 +288,9 @@ def SetSpecular_01(mat, alSurface, VS01, Layers):
 
         VtoA_ani = ((VS01['SLA_Anisotropy'] + 1) / 2)
         alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1ANISOTROPY, VtoA_ani)
-        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1ROTATION, VS01['SLA_AniRot'])
+
+        VtoA_aniRot = rangeMap(mat[c4d.VRAYMATERIAL_SPECULAR1_ANISOTROPYROT], 6.28318530718, 0, 1, 0)
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1ROTATION, VtoA_aniRot)
 
         # create bitmaps / images
         if VS01['SC_TextureMap'] and VS01['SC_TextureMap'].GetType() == c4d.Xbitmap:

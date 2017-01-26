@@ -1,7 +1,6 @@
 # TexConvert
 ## A Texture converter for VRay and C4DtoA - alSurface
 ---
----
   - Gets VRay material.  
   - Gets active material layers.  
   - Gets data from active layers.  
@@ -74,4 +73,6 @@
   - IOR
   - Glossiness  
   - Glossiness Texture Map (if present)  
+
+  
 ---

@@ -75,7 +75,6 @@ def ActiveLayers(mat):
         if mat[c4d.VRAYMATERIAL_USE_SSS]:
             MatLayers['SSS'] = 1
 
-
     for x in MatLayers:
         if MatLayers[x]:
             activeLayers.append(x)
@@ -85,12 +84,25 @@ def ActiveLayers(mat):
     if MatType() != "VRay":
         c4d.gui.MessageDialog("Please select a VRay Material")
 
-def GetLayerData:
-    pass
+
+
+
+def GetDiffuse_01():
+    Diffuse_01 = {
+    'DC_Colour' : mat[c4d.VRAYMATERIAL_COLOR1_COLOR], # c4d Vector
+    'DC_Brightness' : mat[c4d.VRAYMATERIAL_COLOR1_MULT], # float
+    'DC_TextureMap' : mat[c4d.VRAYMATERIAL_COLOR1_SHADER], # c4d.BaseShader object
+    'DC_TexMapPath' : None # string
+    }
+    if Diffuse_01['DC_TextureMap'] != None:
+        Diffuse_01['DC_TexMapPath'] = mat[c4d.VRAYMATERIAL_COLOR1_SHADER][c4d.BITMAPSHADER_FILENAME]
+
+    return Diffuse_01
 
 
 def main():
-    print ActiveLayers(mat)
+    if 'Diffuse_01' in ActiveLayers(mat):
+        VrayD01 = GetDiffuse_01()
 
 
 

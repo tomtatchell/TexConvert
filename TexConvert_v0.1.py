@@ -266,15 +266,20 @@ def GetSpecular_01():
     if Specular_01['SLP_TextureMap'] != None:
         Specular_01['SLP_TexMapPath'] = mat[c4d.VRAYMATERIAL_SPECULAR1_REFLECTIONGLOSSSHADER][c4d.BITMAPSHADER_FILENAME]
 
+    return Specular_01
+
+
 def SetSpecular_01(mat, alSurface, VS01, Layers):
     if 'Spec_01' in Layers:
         alSurface.GetOpContainerInstance().SetVector(C4DAIP_ALSURFACE_SPECULAR1COLOR, VS01['SC_Colour'])
         alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1STRENGTH, VS01['SC_Brightness'])
         alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1IOR, VS01['SLT_IOR'])
 
-        VraytoA_roughness = 1.0 - VS01['SLP_RefGloss']  # convert vray 0-1 value to c4dtoa 1-0 value
-        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1ROUGHNESS, VraytoA_roughness)
-        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1ANISOTROPY, VS01['SLA_Anisotropy'])
+        VtoA_roughness = 1.0 - VS01['SLP_RefGloss']  # convert vray 0-1 value to c4dtoa 1-0 value
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1ROUGHNESS, VtoA_roughness)
+
+        VtoA_ani = ((VS01['SLA_Anisotropy'] + 1) / 2)
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1ANISOTROPY, VtoA_ani)
         alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1ROTATION, VS01['SLA_AniRot'])
 
         # create bitmaps / images
@@ -319,48 +324,14 @@ def main():
         raise Exception("Failed to create alSurface shader")
 
 
-
-
     # set shader parameters
     alSurface.SetName("VRay to A")
 
-
-
     SetDiffuse_01(mat, alSurface, VD01, Layers)
-
-
-
+    SetSpecular_01(mat, alSurface, VS01, Layers)
 
     # connect shaders
     SetRootShader(mat, alSurface, ARNOLD_BEAUTY_PORT_ID)
-    #if VD01['DC_TextureMap'] != None:
-        #AddConnection(mat, bitmap, alSurface, C4DAIP_ALSURFACE_DIFFUSECOLOR)
-
-
-    """
-    # create shaders
-    standard = CreateArnoldShader(mat, C4DAIN_STANDARD, 150, 100)
-    if standard is None:
-        raise Exception("Failed to create standard shader")
-    noise = CreateArnoldShader(mat, C4DAIN_NOISE, 0, 50)
-    if noise is None:
-        raise Exception("Failed to create noise shader")
-    bitmap = CreateC4DShader(mat, c4d.Xbitmap, 0, 150)
-    if bitmap is None:
-        raise Exception("Failed to create Bitmap shader")
-
-    # set shader parameters
-    standard.SetName("mystandard")
-    standard.GetOpContainerInstance().SetVector(C4DAIP_STANDARD_KS_COLOR, c4d.Vector(0.9, 0.9, 0.4))
-    standard.GetOpContainerInstance().SetFloat(C4DAIP_STANDARD_KS, 0.2)
-    noise.SetName("mynoise")
-    noise.GetOpContainerInstance().SetInt32(C4DAIP_NOISE_OCTAVES, 3)
-    noise.GetOpContainerInstance().SetFloat(C4DAIP_NOISE_DISTORTION, 3.42)
-
-    # connect shaders
-    SetRootShader(mat, standard, ARNOLD_BEAUTY_PORT_ID)
-    AddConnection(mat, noise, standard, C4DAIP_STANDARD_KD_COLOR)
-    """
 
     # redraw
     c4d.EventAdd(c4d.EVENT_FORCEREDRAW)

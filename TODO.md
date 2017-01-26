@@ -8,4 +8,5 @@
  - [ ] Get material layer data  
  - [ ] Check for Texture Map  
  - [ ] Check for RGB vectors  
- 
+
+- [ ] Fix VRay to Arnold Anisotropy rotation conversion 

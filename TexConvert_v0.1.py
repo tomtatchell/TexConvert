@@ -42,6 +42,12 @@ C4DAIP_ALSURFACE_DIFFUSESTRENGTH = 1212163586
 C4DAIP_ALSURFACE_DIFFUSECOLOR = 1076269102
 C4DAIP_ALSURFACE_DIFFUSEROUGHNESS = 1994027635
 C4DAIP_ALSURFACE_OPACITY = 234584834
+C4DAIP_ALSURFACE_SPECULAR1STRENGTH = 959965816
+C4DAIP_ALSURFACE_SPECULAR1COLOR = 1968924664
+C4DAIP_ALSURFACE_SPECULAR1IOR = 1098234115
+C4DAIP_ALSURFACE_SPECULAR1ROUGHNESS = 2033531479
+C4DAIP_ALSURFACE_SPECULAR1ANISOTROPY = 2145841423
+C4DAIP_ALSURFACE_SPECULAR1ROTATION = 1577603657
 
 # from res/description/ainode_image.h
 C4DAIP_IMAGE_FILENAME = 1737748425
@@ -251,14 +257,47 @@ def GetSpecular_01():
     'SLT_IOR' : mat[c4d.VRAYMATERIAL_SPECULAR1_FRESNELIOR1], # float
     'SLP_RefGloss' : mat[c4d.VRAYMATERIAL_SPECULAR1_REFLECTIONGLOSS], # float
     'SLP_TextureMap' : mat[c4d.VRAYMATERIAL_SPECULAR1_REFLECTIONGLOSSSHADER], # c4d.BaseShader object
-    'SLP_TexMapPath' : None
+    'SLP_TexMapPath' : None,
+    'SLA_Anisotropy' : mat[c4d.VRAYMATERIAL_SPECULAR1_ANISOTROPY], # float
+    'SLA_AniRot' : mat[c4d.VRAYMATERIAL_SPECULAR1_ANISOTROPYROT], # fload
     }
     if Specular_01['SC_TextureMap'] != None:
         Specular_01['SC_TexMapPath'] = mat[c4d.VRAYMATERIAL_SPECULAR1_SHADER][c4d.BITMAPSHADER_FILENAME]
     if Specular_01['SLP_TextureMap'] != None:
         Specular_01['SLP_TexMapPath'] = mat[c4d.VRAYMATERIAL_SPECULAR1_REFLECTIONGLOSSSHADER][c4d.BITMAPSHADER_FILENAME]
 
-def SetSpecular_01():
+def SetSpecular_01(mat, alSurface, VS01, Layers):
+    if 'Spec_01' in Layers:
+        alSurface.GetOpContainerInstance().SetVector(C4DAIP_ALSURFACE_SPECULAR1COLOR, VS01['SC_Colour'])
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1STRENGTH, VS01['SC_Brightness'])
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1IOR, VS01['SLT_IOR'])
+
+        VraytoA_roughness = 1.0 - VS01['SLP_RefGloss']  # convert vray 0-1 value to c4dtoa 1-0 value
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1ROUGHNESS, VraytoA_roughness)
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1ANISOTROPY, VS01['SLA_Anisotropy'])
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1ROTATION, VS01['SLA_AniRot'])
+
+        # create bitmaps / images
+        if VS01['SC_TextureMap'] and VS01['SC_TextureMap'].GetType() == c4d.Xbitmap:
+            SCBitmap = CreateC4DShader(mat, c4d.Xbitmap, -250, 150)
+            if SCBitmap is None:
+                raise Exception("Failed to create Bitmap shader")
+            SCBitmap.SetName("Specular Colour Bitmap")
+            SCBitmapShader = SCBitmap.GetFirstShader()
+            SCBitmapShader.GetDataInstance().SetFilename(c4d.BITMAPSHADER_FILENAME, VS01['SC_TexMapPath'])
+            AddConnection(mat, SCBitmap, alSurface, C4DAIP_ALSURFACE_SPECULAR1COLOR)
+
+        if VS01['SLP_TextureMap'] and VS01['SLP_TextureMap'].GetType() == c4d.Xbitmap:
+            SLPBitmap = CreateC4DShader(mat, c4d.Xbitmap, -250, 100)
+            if SLPBitmap is None:
+                raise Exception("Failed to create Bitmap shader")
+            SLPBitmap.SetName("Specular Roughness Bitmap")
+            SLPBitmapShader = SLPBitmap.GetFirstShader()
+            SLPBitmapShader.GetDataInstance().SetFilename(c4d.BITMAPSHADER_FILENAME, VS01['SLP_TexMapPath'])
+            AddConnection(mat, SLPBitmap, alSurface, C4DAIP_ALSURFACE_SPECULAR1ROUGHNESS)
+    else:
+         alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1STRENGTH, 0.0)
+
 def main():
     doc = c4d.documents.GetActiveDocument()
     activemat = doc.GetActiveMaterial()

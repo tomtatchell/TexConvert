@@ -8,7 +8,7 @@
   - Create C4DtoA shader network.  
   - Create alShader node.  
   - Applies stored VRay data to alShader node, creating
-  necessary nodes (eg. image, bitmap, noise etc.)
+  necessary nodes (eg. image, bitmap, noise, bump2d etc.)
 
 ---
 
@@ -74,5 +74,5 @@
   - Glossiness  
   - Glossiness Texture Map (if present)  
 
-  
+
 ---

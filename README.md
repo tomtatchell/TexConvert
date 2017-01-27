@@ -14,7 +14,7 @@
 
 ## How to use
 ---
-- Simply import the script (TexConver_v0.1.py) into C4D's script manager
+- Simply import the script into C4D's script manager
 - Select the material you wish to convert
 - Click execute and bam! it should have converted it. *There are some limitations being worked on*
 

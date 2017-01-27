@@ -527,7 +527,7 @@ def main():
     mat = c4d.BaseMaterial(ARNOLD_SHADER_NETWORK)
     if mat is None:
         raise Exception("Failed to create material")
-    mat.SetName("VtoA01")
+    mat.SetName("VtoAl01")
     doc.InsertMaterial(mat)
 
     # create shaders

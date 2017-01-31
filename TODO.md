@@ -12,7 +12,7 @@
 - [x] Fix VRay to Arnold Anisotropy rotation conversion  
 - [x] Create Get and Set for specular channel 2  
 - [x] Create Get and Set Bump  
-- [ ] Method for adding SSS  
+- [x] Method for adding SSS  
 - [ ] Method for adding 2nd diffuse layer  
 - [ ] Method for adding specular layers 3, 4 and 5  
 - [ ] Method for adding Material Weight  

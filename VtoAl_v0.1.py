@@ -40,7 +40,6 @@ C4DAIP_BUMP2D_BUMP_MAP = 1722542866
 C4DAIP_BUMP2D_BUMP_HEIGHT = 149592681
 C4DAIP_BUMP2D_SHADER = 1367502316
 
-
 # alShader nodes
 ALSURFACE_NODE = 815861509
 
@@ -74,10 +73,20 @@ C4DAIP_ALSURFACE_TRANSMISSIONLINKTOSPECULAR1 = 1303558196
 C4DAIP_ALSURFACE_EMISSIONSTRENGTH = 533840799
 C4DAIP_ALSURFACE_EMISSIONCOLOR = 1546843503
 
+C4DAIP_ALSURFACE_SSSMIX = 1599486640
+C4DAIP_ALSURFACE_SSSDENSITYSCALE = 1920019850
+C4DAIP_ALSURFACE_SSSRADIUS = 1389648490
+C4DAIP_ALSURFACE_SSSWEIGHT1 = 938517691
+C4DAIP_ALSURFACE_SSSRADIUSCOLOR = 601525929
+C4DAIP_ALSURFACE_SSSRADIUS2 = 1386240036
+C4DAIP_ALSURFACE_SSSWEIGHT2 = 938517692
+C4DAIP_ALSURFACE_SSSRADIUSCOLOR2 = 1624480773
+C4DAIP_ALSURFACE_SSSRADIUS3 = 1386240035
+C4DAIP_ALSURFACE_SSSWEIGHT3 = 938517693
+C4DAIP_ALSURFACE_SSSRADIUSCOLOR3 = 1624480772
+
 # from res/description/ainode_image.h
 C4DAIP_IMAGE_FILENAME = 1737748425
-
-
 
 
 def CreateArnoldShader(material, nodeId, posx, posy):
@@ -90,6 +99,7 @@ def CreateArnoldShader(material, nodeId, posx, posy):
     material.Message(c4d.MSG_BASECONTAINER, msg)
     return msg.GetLink(C4DTOA_MSG_RESP1)
 
+
 def CreateC4DShader(material, nodeId, posx, posy):
     msg = c4d.BaseContainer()
     msg.SetInt32(C4DTOA_MSG_TYPE, C4DTOA_MSG_ADD_SHADER)
@@ -99,6 +109,7 @@ def CreateC4DShader(material, nodeId, posx, posy):
     msg.SetInt32(C4DTOA_MSG_PARAM4, posy)
     material.Message(c4d.MSG_BASECONTAINER, msg)
     return msg.GetLink(C4DTOA_MSG_RESP1)
+
 
 def CreateReference(material, ref, posx, posy):
     msg = c4d.BaseContainer()
@@ -110,6 +121,7 @@ def CreateReference(material, ref, posx, posy):
     material.Message(c4d.MSG_BASECONTAINER, msg)
     return msg.GetLink(C4DTOA_MSG_RESP1)
 
+
 def AddConnection(material, srcNode, dstNode, dstPortId):
     msg = c4d.BaseContainer()
     msg.SetInt32(C4DTOA_MSG_TYPE, C4DTOA_MSG_ADD_CONNECTION)
@@ -120,6 +132,7 @@ def AddConnection(material, srcNode, dstNode, dstPortId):
     material.Message(c4d.MSG_BASECONTAINER, msg)
     return msg.GetBool(C4DTOA_MSG_RESP1)
 
+
 def SetRootShader(material, shader, rootPortId):
     msg = c4d.BaseContainer()
     msg.SetInt32(C4DTOA_MSG_TYPE, C4DTOA_MSG_CONNECT_ROOT_SHADER)
@@ -129,6 +142,7 @@ def SetRootShader(material, shader, rootPortId):
     material.Message(c4d.MSG_BASECONTAINER, msg)
     return msg.GetBool(C4DTOA_MSG_RESP1)
 
+
 def rangeMap(curValue, curMax, curMin, newMax, newMin):
     curRange = (curMax - curMin)
     if (curRange == 0): return 0
@@ -137,8 +151,10 @@ def rangeMap(curValue, curMax, curMin, newMax, newMin):
         newVal = (((curValue - curMin) * newRange) / curRange) + newMin
         return newVal
 
+
 doc = c4d.documents.GetActiveDocument()
 mat = doc.GetActiveMaterial()
+
 
 def MatType():
     """
@@ -152,7 +168,6 @@ def MatType():
         return "Arnold"
     else:
         return "Standard"
-
 
 
 def ActiveLayers(mat):
@@ -241,6 +256,7 @@ def GetDiffuse_01():
     if Diffuse_01['DO_TextureMap'] != None:
         Diffuse_01['DO_TexMapPath'] = mat[c4d.VRAYMATERIAL_COLOR1_ROUGHNESSTEX][c4d.BITMAPSHADER_FILENAME]
     return Diffuse_01
+
 
 def SetDiffuse_01(mat, alSurface, VD01, Layers):
     if 'Diffuse_01' in Layers:
@@ -511,6 +527,79 @@ def SetBump(mat, alSurface, VB, Layers):
         SetRootShader(mat, VBump, ARNOLD_BEAUTY_PORT_ID)
 
 
+def GetSSS():
+    sss = {
+        'GP_Scale' : mat[c4d.VRAYMATERIAL_SSS_SCALE], # float
+        'GP_MaxDistance' : mat[c4d.VRAYMATERIAL_SSS_MAXDISTANCE], # float
+        'SP_C1' : mat[c4d.VRAYMATERIAL_SSS_OVERALLCOLOR],
+        'SP_C1_TexMap' : mat[c4d.VRAYMATERIAL_SSS_OVERALLCOLORSHADER],
+        'SP_C1_TexPath' : None,
+        'SP_C2' : mat[c4d.VRAYMATERIAL_SSS_SSSCOLOR],
+        'SP_C2_TexMap' : mat[c4d.VRAYMATERIAL_SSS_SSSCOLORSHADER],
+        'SP_C2_TexPath' : None,
+        'SP_C3' : mat[c4d.VRAYMATERIAL_SSS_SCATTERCOLOR],
+        'SP_C3_TexMap' : mat[c4d.VRAYMATERIAL_SSS_SCATTERSHADER],
+        'SP_C3_TexPath' : None,
+    }
+
+    if sss['SP_C1_TexMap'] != None:
+        sss['SP_C1_TexPath'] = mat[c4d.VRAYMATERIAL_SSS_OVERALLCOLORSHADER][c4d.BITMAPSHADER_FILENAME]
+    if sss['SP_C2_TexMap'] != None:
+        sss['SP_C2_TexPath'] = mat[c4d.VRAYMATERIAL_SSS_SSSCOLORSHADER][c4d.BITMAPSHADER_FILENAME]
+    if sss['SP_C3_TexMap'] != None:
+        sss['SP_C3_TexPath'] = mat[c4d.VRAYMATERIAL_SSS_SCATTERSHADER][c4d.BITMAPSHADER_FILENAME]
+    return sss
+
+
+def SetSSS(mat, alSurface, VSSS, Layers):
+    if 'SSS' in Layers:
+        diffuse = alSurface.GetOpContainerInstance().GetFloat(C4DAIP_ALSURFACE_DIFFUSESTRENGTH)
+        if diffuse == 0:
+            alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_DIFFUSESTRENGTH, 1)
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SSSMIX, 1)
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SSSDENSITYSCALE, VSSS['GP_Scale'])
+
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SSSRADIUS, 1)
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SSSWEIGHT1, 0.5)
+        alSurface.GetOpContainerInstance().SetVector(C4DAIP_ALSURFACE_SSSRADIUSCOLOR, VSSS['SP_C1'])
+
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SSSRADIUS2, 2)
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SSSWEIGHT2, 0.3)
+        alSurface.GetOpContainerInstance().SetVector(C4DAIP_ALSURFACE_SSSRADIUSCOLOR2, VSSS['SP_C2'])
+
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SSSRADIUS3, 3)
+        alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SSSWEIGHT3, 0.2)
+        alSurface.GetOpContainerInstance().SetVector(C4DAIP_ALSURFACE_SSSRADIUSCOLOR3, VSSS['SP_C3'])
+
+        # create bitmaps / images
+        if VSSS['SP_C1_TexMap'] and VSSS['SP_C1_TexMap'].GetType() == c4d.Xbitmap:
+            C1Bitmap = CreateC4DShader(mat, c4d.Xbitmap, -150, 150)
+            if C1Bitmap is None:
+                raise Exception("Failed to create Bitmap shader")
+            C1Bitmap.SetName("SSS Layer 1")
+            C1BitmapShader = C1Bitmap.GetFirstShader()
+            C1BitmapShader.GetDataInstance().SetFilename(c4d.BITMAPSHADER_FILENAME, VSSS['SP_C1_TexPath'])
+            AddConnection(mat, C1Bitmap, alSurface, C4DAIP_ALSURFACE_SSSRADIUSCOLOR)
+        if VSSS['SP_C2_TexMap'] and VSSS['SP_C2_TexMap'].GetType() == c4d.Xbitmap:
+            C2Bitmap = CreateC4DShader(mat, c4d.Xbitmap, -150, 50)
+            if C2Bitmap is None:
+                raise Exception("Failed to create Bitmap shader")
+            C2Bitmap.SetName("SSS Layer 2")
+            C2BitmapShader = C2Bitmap.GetFirstShader()
+            C2BitmapShader.GetDataInstance().SetFilename(c4d.BITMAPSHADER_FILENAME, VSSS['SP_C2_TexPath'])
+            AddConnection(mat, C2Bitmap, alSurface, C4DAIP_ALSURFACE_SSSRADIUSCOLOR2)
+        if VSSS['SP_C3_TexMap'] and VSSS['SP_C3_TexMap'].GetType() == c4d.Xbitmap:
+            C3Bitmap = CreateC4DShader(mat, c4d.Xbitmap, -150, 0)
+            if C3Bitmap is None:
+                raise Exception("Failed to create Bitmap shader")
+            C3Bitmap.SetName("SSS Layer 3")
+            C3BitmapShader = C3Bitmap.GetFirstShader()
+            C3BitmapShader.GetDataInstance().SetFilename(c4d.BITMAPSHADER_FILENAME, VSSS['SP_C3_TexPath'])
+            AddConnection(mat, C3Bitmap, alSurface, C4DAIP_ALSURFACE_SSSRADIUSCOLOR3)
+
+    else:
+         alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_DIFFUSESTRENGTH, 0.0)
+
 def main():
     doc = c4d.documents.GetActiveDocument()
     activemat = doc.GetActiveMaterial()
@@ -522,6 +611,7 @@ def main():
     VT = GetTransmission()
     VE = GetEmission()
     VB = GetBump()
+    VSSS = GetSSS()
 
     # create material
     mat = c4d.BaseMaterial(ARNOLD_SHADER_NETWORK)
@@ -544,13 +634,15 @@ def main():
     SetTransmission(mat, alSurface, VT, Layers)
     SetEmission(mat, alSurface, VE, Layers)
     SetBump(mat, alSurface, VB, Layers)
+    SetSSS(mat, alSurface, VSSS, Layers)
 
     # connect root shader
     if 'Bump' not in Layers:
-        SettRootShader(mat, alSurface, ARNOLD_BEAUTY_PORT_ID)
+        SetRootShader(mat, alSurface, ARNOLD_BEAUTY_PORT_ID)
 
     # redraw
     c4d.EventAdd(c4d.EVENT_FORCEREDRAW)
+
 
 if __name__=='__main__':
     main()

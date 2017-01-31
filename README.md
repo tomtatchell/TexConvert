@@ -73,6 +73,17 @@
   - IOR
   - Glossiness  
   - Glossiness Texture Map (if present)  
+- **SSS Layer**  
+
+  *This is more of a template transfer to get your texture map / colours across.  
+  Refinement will be needed on the radius / depth and weightings*
+  - Scale  
+  - Overall Colour (*colour 1 in AlSurface*)  
+  - Overall Colour Texture Map (if present)  
+  - Sub Surface Colour (*colour 2 in AlSurface*)  
+  - Sub Surface Colour Texture Map (if present)  
+  - Scatter Colour (*colour 3 in AlSurface*)  
+  - Scatter Colour Texture Map (if present)  
 
 
 ---

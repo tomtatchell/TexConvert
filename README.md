@@ -72,7 +72,7 @@
   - Texture Map (if present)  
   - IOR
   - Glossiness  
-  - Glossiness Texture Map (if present)  
+  - Glossiness Texture Map (if present)
 - **SSS Layer**  
 
   *This is more of a template transfer to get your texture map / colours across.  

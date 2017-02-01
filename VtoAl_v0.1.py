@@ -598,7 +598,7 @@ def SetSSS(mat, alSurface, VSSS, Layers):
             AddConnection(mat, C3Bitmap, alSurface, C4DAIP_ALSURFACE_SSSRADIUSCOLOR3)
 
     else:
-         alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_DIFFUSESTRENGTH, 0.0)
+         alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SSSMIX, 0.0)
 
 def main():
     doc = c4d.documents.GetActiveDocument()

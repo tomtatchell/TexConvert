@@ -152,11 +152,7 @@ def rangeMap(curValue, curMax, curMin, newMax, newMin):
         return newVal
 
 
-doc = c4d.documents.GetActiveDocument()
-mat = doc.GetActiveMaterial()
-
-
-def MatType():
+def MatType(mat):
     """
     Returns the type of the currently active material.
     """
@@ -193,7 +189,7 @@ def ActiveLayers(mat):
     }
 
     activeLayers = []
-    if MatType() == "VRay":
+    if MatType(mat) == "VRay":
         if mat[c4d.VRAYMATERIAL_USE_MATTE]:
             MatLayers['MatMatte'] = 1
         if mat[c4d.VRAYMATERIAL_USE_TRANSP]:
@@ -231,11 +227,11 @@ def ActiveLayers(mat):
 
     return activeLayers
 
-    if MatType() != "VRay":
+    if MatType(mat) != "VRay":
         c4d.gui.MessageDialog("Please select a VRay Material")
 
 
-def GetDiffuse_01():
+def GetDiffuse_01(mat):
     Diffuse_01 = {
     'DC_Colour' : mat[c4d.VRAYMATERIAL_COLOR1_COLOR], # c4d Vector
     'DC_Brightness' : mat[c4d.VRAYMATERIAL_COLOR1_MULT], # float
@@ -283,6 +279,9 @@ def SetDiffuse_01(mat, alSurface, VD01, Layers):
             DLTBitmapShader = DLTBitmap.GetFirstShader()
             DLTBitmapShader.GetDataInstance().SetFilename(c4d.BITMAPSHADER_FILENAME, VD01['DLT_TexMapPath'])
             AddConnection(mat, DLTBitmap, alSurface, C4DAIP_ALSURFACE_OPACITY)
+        else:
+            opacity = 1 - VD01['DLT_Amount']
+            alSurface.GetOpContainerInstance().SetVector(C4DAIP_ALSURFACE_OPACITY, c4d.Vector(opacity))
 
         if VD01['DO_TextureMap'] and VD01['DO_TextureMap'].GetType() == c4d.Xbitmap:
             DOBitmap = CreateC4DShader(mat, c4d.Xbitmap, -150, 50)
@@ -296,7 +295,7 @@ def SetDiffuse_01(mat, alSurface, VD01, Layers):
          alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_DIFFUSESTRENGTH, 0.0)
 
 
-def GetSpecular_01():
+def GetSpecular_01(mat):
     Specular_01 = {
     'SC_Colour' : mat[c4d.VRAYMATERIAL_SPECULAR1_COLOR], # c4d Vector
     'SC_Brightness' : mat[c4d.VRAYMATERIAL_SPECULAR1_COLOR_MULT], # float
@@ -353,7 +352,7 @@ def SetSpecular_01(mat, alSurface, VS01, Layers):
          alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR1STRENGTH, 0.0)
 
 
-def GetSpecular_02():
+def GetSpecular_02(mat):
     Specular_02 = {
     'SC_Colour' : mat[c4d.VRAYMATERIAL_SPECULAR2_COLOR], # c4d Vector
     'SC_Brightness' : mat[c4d.VRAYMATERIAL_SPECULAR2_COLOR_MULT], # float
@@ -410,7 +409,7 @@ def SetSpecular_02(mat, alSurface, VS02, Layers):
          alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SPECULAR2STRENGTH, 0.0)
 
 
-def GetTransmission():
+def GetTransmission(mat):
     transmission = {
     'RC_Colour' : mat[c4d.VRAYMATERIAL_TRANSPARENCY_COLOR], # c4d Vector
     'RC_Brightness' : mat[c4d.VRAYMATERIAL_TRANSPARENCY_COLOR_MULT], # float
@@ -464,7 +463,7 @@ def SetTransmission(mat, alSurface, VT, Layers):
          alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_TRANSMISSIONSTRENGTH, 0.0)
 
 
-def GetEmission():
+def GetEmission(mat):
         emission = {
         'LC_Colour' : mat[c4d.VRAYMATERIAL_LUMINANCE_COLOR], # c4d Vector
         'LC_Amount' : mat[c4d.VRAYMATERIAL_LUMINANCE_COLOR_MULT], # float
@@ -494,7 +493,7 @@ def SetEmission(mat, alSurface, VE, Layers):
          alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_EMISSIONSTRENGTH, 0.0)
 
 
-def GetBump():
+def GetBump(mat):
     bump = {
     'BTextureMap' : mat[c4d.VRAYMATERIAL_BUMP_SHADER], # c4d.BaseShader object
     'BTexMapPath' : None,
@@ -527,7 +526,7 @@ def SetBump(mat, alSurface, VB, Layers):
         SetRootShader(mat, VBump, ARNOLD_BEAUTY_PORT_ID)
 
 
-def GetSSS():
+def GetSSS(mat):
     sss = {
         'GP_Scale' : mat[c4d.VRAYMATERIAL_SSS_SCALE], # float
         'GP_MaxDistance' : mat[c4d.VRAYMATERIAL_SSS_MAXDISTANCE], # float
@@ -600,24 +599,25 @@ def SetSSS(mat, alSurface, VSSS, Layers):
     else:
          alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SSSMIX, 0.0)
 
-def main():
+
+def VtoA(activemat):
     doc = c4d.documents.GetActiveDocument()
-    activemat = doc.GetActiveMaterial()
+    #activemat = doc.GetActiveMaterial()
     Layers = ActiveLayers(activemat)
 
-    VD01 = GetDiffuse_01()
-    VS01 = GetSpecular_01()
-    VS02 = GetSpecular_02()
-    VT = GetTransmission()
-    VE = GetEmission()
-    VB = GetBump()
-    VSSS = GetSSS()
+    VD01 = GetDiffuse_01(activemat)
+    VS01 = GetSpecular_01(activemat)
+    VS02 = GetSpecular_02(activemat)
+    VT = GetTransmission(activemat)
+    VE = GetEmission(activemat)
+    VB = GetBump(activemat)
+    VSSS = GetSSS(activemat)
 
     # create material
     mat = c4d.BaseMaterial(ARNOLD_SHADER_NETWORK)
     if mat is None:
         raise Exception("Failed to create material")
-    mat.SetName("VtoAl01")
+    mat.SetName(activemat.GetName())
     doc.InsertMaterial(mat)
 
     # create shaders
@@ -627,7 +627,7 @@ def main():
 
 
     # set shader parameters
-    alSurface.SetName("VtoAlSurface")
+    alSurface.SetName('VtoA')
     SetDiffuse_01(mat, alSurface, VD01, Layers)
     SetSpecular_01(mat, alSurface, VS01, Layers)
     SetSpecular_02(mat, alSurface, VS02, Layers)
@@ -642,6 +642,14 @@ def main():
 
     # redraw
     c4d.EventAdd(c4d.EVENT_FORCEREDRAW)
+
+def main():
+
+    doc = c4d.documents.GetActiveDocument()
+    activeMaterials = doc.GetActiveMaterials()
+
+    for material in activeMaterials:
+        VtoA(material)
 
 
 if __name__=='__main__':

@@ -1,4 +1,5 @@
 import c4d
+from c4d import gui
 
 # from api/util/Constants.h
 C4DTOA_MSG_TYPE = 1000
@@ -229,6 +230,9 @@ def ActiveLayers(mat):
 
     if MatType(mat) != "VRay":
         c4d.gui.MessageDialog("Please select a VRay Material")
+
+
+
 
 
 def GetDiffuse_01(mat):
@@ -599,8 +603,14 @@ def SetSSS(mat, alSurface, VSSS, Layers):
     else:
          alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SSSMIX, 0.0)
 
+def swapMat(activemat, mat):
+    objLink = activemat[c4d.ID_MATERIALASSIGNMENTS]
+    for x in xrange(objLink.GetObjectCount()):
+        texTag = objLink.ObjectFromIndex(doc, x)
+        texTag.SetMaterial(mat)
+    c4d.EventAdd()
 
-def VtoA(activemat):
+def VtoA(activemat, qSwapMat):
     doc = c4d.documents.GetActiveDocument()
     #activemat = doc.GetActiveMaterial()
     Layers = ActiveLayers(activemat)
@@ -619,6 +629,9 @@ def VtoA(activemat):
         raise Exception("Failed to create material")
     mat.SetName(activemat.GetName())
     doc.InsertMaterial(mat)
+
+    if qSwapMat:
+        swapMat(activemat, mat)
 
     # create shaders
     alSurface = CreateArnoldShader(mat, ALSURFACE_NODE, 150, 100)
@@ -647,9 +660,11 @@ def main():
 
     doc = c4d.documents.GetActiveDocument()
     activeMaterials = doc.GetActiveMaterials()
+    qSwapMat = gui.QuestionDialog("Do you want to sawp the material assignments?")
 
     for material in activeMaterials:
-        VtoA(material)
+        VtoA(material, qSwapMat)
+
 
 
 if __name__=='__main__':

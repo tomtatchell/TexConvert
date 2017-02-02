@@ -17,8 +17,8 @@
 - [ ] Method for adding specular layers 3, 4 and 5  
 - [ ] Method for adding Material Weight  
 - [ ] Method for adding Material Matte  
-- [ ] Get Script running for selected material only **OR** all VRay materials  
-- [ ] Have option to replace existing VRay material assignments or not  
+- [x] Get Script running for selected material only **OR** all selected VRay materials  
+- [x] Have option to replace existing VRay material assignments or not  
 - [ ] Have option to create tags on objects if material has transparency of some sort (Could just be an option   button, if the layer contains any variation on 100% opacity)  
 
 - [ ] Test other VRay material types.  

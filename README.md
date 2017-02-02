@@ -22,10 +22,10 @@
 
 ## Current Limitations
 ---
-- Only supports 1 selected VRay material at a time
 - Not all features of the VRay material can translate across *yet...*
 - Only tested using a VRayAdvancedMaterial  
-- No support for textures inside filters, c4d noises or builtin elements such as checkerboard.
+- No support for textures inside filters, c4d noises or builtin elements such as checkerboard. 
+- Will convert multiple VRay materials at a time **Unknown upper limit**
 ---
 
 ## What does convert:

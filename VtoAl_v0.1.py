@@ -249,11 +249,11 @@ def GetDiffuse_01(mat):
     'DO_TextureMap' : mat[c4d.VRAYMATERIAL_COLOR1_ROUGHNESSTEX],  # c4d.BaseShader object
     'DO_TexMapPath' : None
     }
-    if Diffuse_01['DC_TextureMap'] != None:
+    if Diffuse_01['DC_TextureMap'] and Diffuse_01['DC_TextureMap'].GetType() == c4d.Xbitmap:
         Diffuse_01['DC_TexMapPath'] = mat[c4d.VRAYMATERIAL_COLOR1_SHADER][c4d.BITMAPSHADER_FILENAME]
-    if Diffuse_01['DLT_TextureMap'] != None:
+    if Diffuse_01['DLT_TextureMap'] and Diffuse_01['DLT_TextureMap'].GetType() == c4d.Xbitmap:
         Diffuse_01['DLT_TexMapPath'] = mat[c4d.VRAYMATERIAL_COLOR1_TRANSPSHADER][c4d.BITMAPSHADER_FILENAME]
-    if Diffuse_01['DO_TextureMap'] != None:
+    if Diffuse_01['DO_TextureMap'] and Diffuse_01['DO_TextureMap'].GetType() == c4d.Xbitmap:
         Diffuse_01['DO_TexMapPath'] = mat[c4d.VRAYMATERIAL_COLOR1_ROUGHNESSTEX][c4d.BITMAPSHADER_FILENAME]
     return Diffuse_01
 
@@ -312,9 +312,9 @@ def GetSpecular_01(mat):
     'SLA_Anisotropy' : mat[c4d.VRAYMATERIAL_SPECULAR1_ANISOTROPY], # float
     'SLA_AniRot' : mat[c4d.VRAYMATERIAL_SPECULAR1_ANISOTROPYROT], # float
     }
-    if Specular_01['SC_TextureMap'] != None:
+    if Specular_01['SC_TextureMap'] and Specular_01['SC_TextureMap'].GetType() == c4d.Xbitmap:
         Specular_01['SC_TexMapPath'] = mat[c4d.VRAYMATERIAL_SPECULAR1_SHADER][c4d.BITMAPSHADER_FILENAME]
-    if Specular_01['SLP_TextureMap'] != None:
+    if Specular_01['SLP_TextureMap'] and Specular_01['SLP_TextureMap'].GetType() == c4d.Xbitmap:
         Specular_01['SLP_TexMapPath'] = mat[c4d.VRAYMATERIAL_SPECULAR1_REFLECTIONGLOSSSHADER][c4d.BITMAPSHADER_FILENAME]
     return Specular_01
 
@@ -369,9 +369,9 @@ def GetSpecular_02(mat):
     'SLA_Anisotropy' : mat[c4d.VRAYMATERIAL_SPECULAR2_ANISOTROPY], # float
     'SLA_AniRot' : mat[c4d.VRAYMATERIAL_SPECULAR2_ANISOTROPYROT], # float
     }
-    if Specular_02['SC_TextureMap'] != None:
+    if Specular_02['SC_TextureMap'] and Specular_02['SC_TextureMap'].GetType() == c4d.Xbitmap:
         Specular_02['SC_TexMapPath'] = mat[c4d.VRAYMATERIAL_SPECULAR2_SHADER][c4d.BITMAPSHADER_FILENAME]
-    if Specular_02['SLP_TextureMap'] != None:
+    if Specular_02['SLP_TextureMap'] and Specular_02['SLP_TextureMap'].GetType() == c4d.Xbitmap:
         Specular_02['SLP_TexMapPath'] = mat[c4d.VRAYMATERIAL_SPECULAR2_REFLECTIONGLOSSSHADER][c4d.BITMAPSHADER_FILENAME]
     return Specular_02
 
@@ -424,9 +424,9 @@ def GetTransmission(mat):
     'RLP_TextureMap' : mat[c4d.VRAYMATERIAL_TRANSPARENCY_GLOSSINESSSHADER], # c4d.BaseShader object
     'RLP_TexMapPath' : None,
     }
-    if transmission['RC_TextureMap'] != None:
+    if transmission['RC_TextureMap'] and transmission['RC_TextureMap'].GetType() == c4d.Xbitmap:
         transmission['RC_TexMapPath'] = mat[c4d.VRAYMATERIAL_TRANSPARENCY_SHADER][c4d.BITMAPSHADER_FILENAME]
-    if transmission['RLP_TextureMap'] != None:
+    if transmission['RLP_TextureMap'] and transmission['RLP_TextureMap'].GetType() == c4d.Xbitmap:
         transmission['RLP_TexMapPath'] = mat[c4d.VRAYMATERIAL_TRANSPARENCY_GLOSSINESSSHADER][c4d.BITMAPSHADER_FILENAME]
     return transmission
 
@@ -474,7 +474,7 @@ def GetEmission(mat):
         'LC_TextureMap' : mat[c4d.VRAYMATERIAL_LUMINANCE_SHADER], # c4d.BaseShader object
         'LC_TexMapPath' : None,
         }
-        if emission['LC_TextureMap'] != None:
+        if emission['LC_TextureMap'] and emission['LC_TextureMap'].GetType() == c4d.Xbitmap:
             emission['LC_TexMapPath'] = mat[c4d.VRAYMATERIAL_LUMINANCE_SHADER][c4d.BITMAPSHADER_FILENAME]
         return emission
 
@@ -503,7 +503,7 @@ def GetBump(mat):
     'BTexMapPath' : None,
     'BAmount' : mat[c4d.VRAYMATERIAL_BUMP_BUMPTEXMULT] # float
     }
-    if bump['BTextureMap'] != None:
+    if bump['BTextureMap'] and bump['BTextureMap'].GetType() == c4d.Xbitmap:
         bump['BTexMapPath'] = mat[c4d.VRAYMATERIAL_BUMP_SHADER][c4d.BITMAPSHADER_FILENAME]
     return bump
 
@@ -545,11 +545,11 @@ def GetSSS(mat):
         'SP_C3_TexPath' : None,
     }
 
-    if sss['SP_C1_TexMap'] != None:
+    if sss['SP_C1_TexMap'] and sss['SP_C1_TexMap'].GetType() == c4d.Xbitmap:
         sss['SP_C1_TexPath'] = mat[c4d.VRAYMATERIAL_SSS_OVERALLCOLORSHADER][c4d.BITMAPSHADER_FILENAME]
-    if sss['SP_C2_TexMap'] != None:
+    if sss['SP_C2_TexMap'] and sss['SP_C2_TexMap'].GetType() == c4d.Xbitmap:
         sss['SP_C2_TexPath'] = mat[c4d.VRAYMATERIAL_SSS_SSSCOLORSHADER][c4d.BITMAPSHADER_FILENAME]
-    if sss['SP_C3_TexMap'] != None:
+    if sss['SP_C3_TexMap'] and sss['SP_C3_TexMap'].GetType() == c4d.Xbitmap:
         sss['SP_C3_TexPath'] = mat[c4d.VRAYMATERIAL_SSS_SCATTERSHADER][c4d.BITMAPSHADER_FILENAME]
     return sss
 
@@ -603,6 +603,27 @@ def SetSSS(mat, alSurface, VSSS, Layers):
     else:
          alSurface.GetOpContainerInstance().SetFloat(C4DAIP_ALSURFACE_SSSMIX, 0.0)
 
+
+def GetMatWeight(mat):
+    matWeight = {
+        'map' : mat[c4d.VRAYMATERIAL_TRANSP_SHADER],
+        'mapPath' : None
+    }
+    if matWeight['map'] and matWeight['map'].GetType() == c4d.Xbitmap:
+        matWeight['mapPath'] = mat[c4d.VRAYMATERIAL_TRANSP_SHADER][c4d.BITMAPSHADER_FILENAME]
+    return matWeight
+
+
+def SetMatWeight(mat, alSurface, VMW, Layers):
+    if VMW['map'] and VMW['map'].GetType() == c4d.Xbitmap:
+        MWBitmap = CreateC4DShader(mat, c4d.Xbitmap, -150, 100)
+        if MWBitmap is None:
+            raise Exception("Failed to create Bitmap shader")
+        MWBitmap.SetName("Matte Weight")
+        MWBitmapShader = MWBitmap.GetFirstShader()
+        MWBitmapShader.GetDataInstance().SetFilename(c4d.BITMAPSHADER_FILENAME, VMW['mapPath'])
+        AddConnection(mat, MWBitmap, alSurface, C4DAIP_ALSURFACE_OPACITY)
+
 def swapMat(activemat, mat):
     objLink = activemat[c4d.ID_MATERIALASSIGNMENTS]
     for x in xrange(objLink.GetObjectCount()):
@@ -610,18 +631,28 @@ def swapMat(activemat, mat):
         texTag.SetMaterial(mat)
     c4d.EventAdd()
 
+
 def VtoA(activemat, qSwapMat):
     doc = c4d.documents.GetActiveDocument()
     #activemat = doc.GetActiveMaterial()
     Layers = ActiveLayers(activemat)
 
-    VD01 = GetDiffuse_01(activemat)
-    VS01 = GetSpecular_01(activemat)
-    VS02 = GetSpecular_02(activemat)
-    VT = GetTransmission(activemat)
-    VE = GetEmission(activemat)
-    VB = GetBump(activemat)
-    VSSS = GetSSS(activemat)
+    if 'Diffuse_01' in Layers:
+        VD01 = GetDiffuse_01(activemat)
+    if 'Spec_01' in Layers:
+        VS01 = GetSpecular_01(activemat)
+    if 'Spec_02' in Layers:
+        VS02 = GetSpecular_02(activemat)
+    if 'Refraction' in Layers:
+        VT = GetTransmission(activemat)
+    if 'Luminosity' in Layers:
+        VE = GetEmission(activemat)
+    if 'Bump' in Layers:
+        VB = GetBump(activemat)
+    if 'SSS' in Layers:
+        VSSS = GetSSS(activemat)
+    if 'MatWeight' in Layers:
+        VMW = GetMatWeight(activemat)
 
     # create material
     mat = c4d.BaseMaterial(ARNOLD_SHADER_NETWORK)
@@ -641,13 +672,22 @@ def VtoA(activemat, qSwapMat):
 
     # set shader parameters
     alSurface.SetName('VtoA')
-    SetDiffuse_01(mat, alSurface, VD01, Layers)
-    SetSpecular_01(mat, alSurface, VS01, Layers)
-    SetSpecular_02(mat, alSurface, VS02, Layers)
-    SetTransmission(mat, alSurface, VT, Layers)
-    SetEmission(mat, alSurface, VE, Layers)
-    SetBump(mat, alSurface, VB, Layers)
-    SetSSS(mat, alSurface, VSSS, Layers)
+    if 'Diffuse_01' in Layers:
+        SetDiffuse_01(mat, alSurface, VD01, Layers)
+    if 'Spec_01' in Layers:
+        SetSpecular_01(mat, alSurface, VS01, Layers)
+    if 'Spec_02' in Layers:
+        SetSpecular_02(mat, alSurface, VS02, Layers)
+    if 'Refraction' in Layers:
+        SetTransmission(mat, alSurface, VT, Layers)
+    if 'Luminosity' in Layers:
+        SetEmission(mat, alSurface, VE, Layers)
+    if 'Bump' in Layers:
+        SetBump(mat, alSurface, VB, Layers)
+    if 'SSS' in Layers:
+        SetSSS(mat, alSurface, VSSS, Layers)
+    if 'MatWeight' in Layers:
+        SetMatWeight(mat, alSurface, VMW, Layers)
 
     # connect root shader
     if 'Bump' not in Layers:

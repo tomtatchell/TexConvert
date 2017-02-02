@@ -22,3 +22,4 @@
 - [ ] Have option to create tags on objects if material has transparency of some sort (Could just be an option   button, if the layer contains any variation on 100% opacity)  
 
 - [ ] Test other VRay material types.  
+- [ ] Create logic to translate from filters, c4d noise, c4d checkerboard etc.

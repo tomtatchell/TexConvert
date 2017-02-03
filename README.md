@@ -1,6 +1,5 @@
 # TexConvert
 ## A Texture converter for VRay and C4DtoA - alSurface
----
   - Gets VRay material.  
   - Gets active material layers.  
   - Gets data from active layers.  
@@ -13,7 +12,6 @@
 ---
 
 ## How to use
----
 - Simply import the script into C4D's script manager  
 - Select the material you wish to convert  
 - Click execute and bam! it should have converted it. *There are some limitations being worked on*  
@@ -21,7 +19,6 @@
 ---
 
 ## Current Limitations
----
 - Not all features of the VRay material can translate across *yet...*  
 - Only tested using a VRayAdvancedMaterial  
 - No support for textures inside filters, c4d noises or builtin elements such as checkerboard.  
@@ -30,7 +27,6 @@
 ---
 
 ## What does convert:
----
 - **Bump**  
   - Texture Map  
   - Bump amount

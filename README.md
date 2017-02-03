@@ -8,24 +8,25 @@
   - Create C4DtoA shader network.  
   - Create alShader node.  
   - Applies stored VRay data to alShader node, creating
-  necessary nodes (eg. image, bitmap, noise, bump2d etc.)
+  necessary nodes (eg. image, bitmap, noise, bump2d etc.)  
 
 ---
 
 ## How to use
 ---
-- Simply import the script into C4D's script manager
-- Select the material you wish to convert
-- Click execute and bam! it should have converted it. *There are some limitations being worked on*
+- Simply import the script into C4D's script manager  
+- Select the material you wish to convert  
+- Click execute and bam! it should have converted it. *There are some limitations being worked on*  
 
 ---
 
 ## Current Limitations
 ---
-- Not all features of the VRay material can translate across *yet...*
+- Not all features of the VRay material can translate across *yet...*  
 - Only tested using a VRayAdvancedMaterial  
-- No support for textures inside filters, c4d noises or builtin elements such as checkerboard. 
-- Will convert multiple VRay materials at a time **Unknown upper limit**
+- No support for textures inside filters, c4d noises or builtin elements such as checkerboard.  
+- Will convert multiple VRay materials at a time **Unknown upper limit**  
+
 ---
 
 ## What does convert:
